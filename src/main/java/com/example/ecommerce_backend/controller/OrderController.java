@@ -1,4 +1,5 @@
 package com.example.ecommerce_backend.controller;
+import com.example.ecommerce_backend.dto.OrderDetailsResponse;
 import com.example.ecommerce_backend.model.Order;
 import com.example.ecommerce_backend.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrder(@PathVariable String orderId) {
-        return ResponseEntity.ok(orderService.getOrderById(orderId));
+    public ResponseEntity<OrderDetailsResponse> getOrder(@PathVariable String orderId) {
+        return ResponseEntity.ok(orderService.getOrderDetails(orderId));
     }
 }

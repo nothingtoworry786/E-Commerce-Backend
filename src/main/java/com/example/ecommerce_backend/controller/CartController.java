@@ -1,7 +1,8 @@
 
 package com.example.ecommerce_backend.controller;
 
-import com.example.ecommerce_backend.model.CartItem;
+import com.example.ecommerce_backend.dto.AddToCartRequest;
+import com.example.ecommerce_backend.dto.CartItemResponse;
 import com.example.ecommerce_backend.service.CartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,13 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CartItem> addToCart(@RequestBody CartItem request) {
-        CartItem cartItem = cartService.addToCart(
-                request.getUserId(),
-                request.getProductId(),
-                request.getQuantity()
-        );
+    public ResponseEntity<CartItemResponse> addToCart(@RequestBody AddToCartRequest request) {
+        CartItemResponse cartItem = cartService.addToCart(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartItem);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<CartItem>> getCart(@PathVariable String userId) {
+    public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userId) {
         return ResponseEntity.ok(cartService.getUserCart(userId));
     }
 

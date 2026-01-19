@@ -1,10 +1,14 @@
 package com.example.ecommerce_backend.service;
+
+import com.example.ecommerce_backend.dto.OrderDetailsResponse;
+import com.example.ecommerce_backend.dto.OrderItemResponse;
 import com.example.ecommerce_backend.model.*;
 import com.example.ecommerce_backend.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -77,4 +81,35 @@ public class OrderService {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
+
+    public OrderDetailsResponse getOrderDetails(String orderId) {
+        Order order = getOrderById(orderId);
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+
+        List<OrderItemResponse> itemResponses = orderItems.stream()
+                .map(this::toItemResponse)
+                .collect(Collectors.toList());
+
+        OrderDetailsResponse response = new OrderDetailsResponse();
+        response.setId(order.getId());
+        response.setUserId(order.getUserId());
+        response.setTotalAmount(order.getTotalAmount());
+        response.setStatus(order.getStatus());
+        response.setCreatedAt(order.getCreatedAt());
+        response.setItems(itemResponses);
+
+        return response;
+    }
+
+    private OrderItemResponse toItemResponse(OrderItem orderItem) {
+        Product product = productRepository.findById(orderItem.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        OrderItemResponse response = new OrderItemResponse();
+        response.setId(orderItem.getId());
+        response.setQuantity(orderItem.getQuantity());
+        response.setPrice(orderItem.getPrice());
+        response.setProduct(product);
+        return response;
+    }
 }
+
