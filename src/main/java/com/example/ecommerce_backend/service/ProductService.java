@@ -9,13 +9,13 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
+    private static ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(Product product) {
+    public static Product createProduct(Product product) {
         return productRepository.save(product);
     }
 

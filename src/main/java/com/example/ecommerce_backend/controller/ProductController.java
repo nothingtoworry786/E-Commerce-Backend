@@ -20,18 +20,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        Product product1=ProductService.createProduct(product);
+        return ResponseEntity.ok(product1);
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> allproducts=productService.getAllProducts();
+        return ResponseEntity.ok(allproducts);
     }
     @DeleteMapping("/{productid}")
-    public String DeleteProduct(@PathVariable String productid){
+    public ResponseEntity<String> DeleteProduct(@PathVariable String productid){
         productService.DeleteProduct(productid);
-        return "done";
+        return ResponseEntity.status(HttpStatus.OK).body("Product Deleted");
     }
     @GetMapping("/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable String productId) {
